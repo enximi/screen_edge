@@ -238,49 +238,59 @@ fn alt_shift_tab() -> Result<()> {
     Ok(())
 }
 
+// 黑名单
+
+fn in_blacklist(window_handle: isize) -> Result<bool> {
+    let window_title_blacklist = vec!["PUBG：绝地求生 "];
+    let window_title = window_inspector::get_window_title(window_handle)?;
+    Ok(window_title_blacklist.contains(&window_title.as_str()))
+}
+
 fn execute(screen_position: ScreenPosition, user_operation: UserOperation) -> Result<()> {
     let action = get_action(screen_position, user_operation);
     if let Some(action) = action {
-        match action {
-            Action::NextDesktop => {
-                log::info!("next desktop");
-                next_desktop()?;
-            }
-            Action::PreviousDesktop => {
-                log::info!("previous desktop");
-                previous_desktop()?;
-            }
-            Action::MultiTaskView => {
-                log::info!("multi task view");
-                multi_task_view()?;
-            }
-            Action::VolumeUp => {
-                log::info!("volume up");
-                volume_up()?;
-            }
-            Action::VolumeDown => {
-                log::info!("volume down");
-                volume_down()?;
-            }
-            Action::VolumeMute => {
-                log::info!("volume mute");
-                volume_mute()?;
-            }
-            Action::CtrlTab => {
-                log::info!("ctrl tab");
-                ctrl_tab()?;
-            }
-            Action::CtrlShiftTab => {
-                log::info!("ctrl shift tab");
-                ctrl_shift_tab()?;
-            }
-            Action::AltTab => {
-                log::info!("alt tab");
-                alt_tab()?;
-            }
-            Action::AltShiftTab => {
-                log::info!("alt shift tab");
-                alt_shift_tab()?;
+        if !in_blacklist(window_inspector::get_foreground_window_handle())? {
+            match action {
+                Action::NextDesktop => {
+                    log::info!("next desktop");
+                    next_desktop()?;
+                }
+                Action::PreviousDesktop => {
+                    log::info!("previous desktop");
+                    previous_desktop()?;
+                }
+                Action::MultiTaskView => {
+                    log::info!("multi task view");
+                    multi_task_view()?;
+                }
+                Action::VolumeUp => {
+                    log::info!("volume up");
+                    volume_up()?;
+                }
+                Action::VolumeDown => {
+                    log::info!("volume down");
+                    volume_down()?;
+                }
+                Action::VolumeMute => {
+                    log::info!("volume mute");
+                    volume_mute()?;
+                }
+                Action::CtrlTab => {
+                    log::info!("ctrl tab");
+                    ctrl_tab()?;
+                }
+                Action::CtrlShiftTab => {
+                    log::info!("ctrl shift tab");
+                    ctrl_shift_tab()?;
+                }
+                Action::AltTab => {
+                    log::info!("alt tab");
+                    alt_tab()?;
+                }
+                Action::AltShiftTab => {
+                    log::info!("alt shift tab");
+                    alt_shift_tab()?;
+                }
             }
         }
     }
