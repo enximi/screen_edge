@@ -82,8 +82,7 @@ fn run() -> Result<()> {
 }
 
 fn execute(screen_position: ScreenPosition, user_operation: UserOperation) -> Result<()> {
-    let action = get_action(screen_position, user_operation);
-    if let Some(action) = action {
+    if let Some(action) = get_action(screen_position, user_operation) {
         if !in_blacklist(window_inspector::get_foreground_window_handle())? {
             match action {
                 Action::NextDesktop => {
